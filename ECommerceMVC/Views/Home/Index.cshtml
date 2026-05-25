@@ -1,0 +1,251 @@
+﻿@model IEnumerable<ECommerceMVC.ViewModels.HangHoaVM>
+
+@{
+    ViewData["Title"] = "Trang chủ - HSHOP2023";
+}
+
+@* Thêm thư viện hiệu ứng cuộn trang *@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<div class="container-fluid py-5 mb-5 hero-header" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+    <div class="container py-5">
+        <div class="row g-4 align-items-start">
+            @* Cột Menu bên trái - Thêm hiệu ứng nổi *@
+            <div class="col-lg-3 animate__animated animate__fadeInLeft">
+                <div class="shadow-sm rounded bg-white p-2">
+                    @await Component.InvokeAsync("MenuLoai")
+                </div>
+            </div>
+
+            @* Cột nội dung bên phải *@
+            <div class="col-lg-9 animate__animated animate__fadeIn">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h1 class="display-6 fw-bold text-dark border-start border-4 border-primary ps-3">HSHOP2023</h1>
+
+                    <form asp-controller="HangHoa" asp-action="Search" method="get" class="search-box">
+                        <div class="input-group">
+                            <input type="text" name="query" class="form-control border-0 shadow-sm py-2" placeholder="Tìm sản phẩm...">
+                            <button type="submit" class="btn btn-primary shadow-sm">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="hero-banner rounded-4 p-5 position-relative overflow-hidden shadow-lg" style="background: #1a1a1a;">
+                    <div class="row g-5 align-items-center position-relative" style="z-index: 2;">
+                        <div class="col-md-12 col-lg-7">
+                            <h4 class="mb-3 text-warning fw-light animate__animated animate__fadeInDown">Cam Kết 100% Chính Hãng</h4>
+                            <h1 class="mb-5 display-4 text-white fw-bold animate__animated animate__fadeInLeft animate__delay-1s">Sản Phẩm Công Nghệ <br /><span class="text-primary">& Đồ Gia Dụng</span></h1>
+                        </div>
+                        <div class="col-md-12 col-lg-5 animate__animated animate__zoomIn">
+                            <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner" role="listbox">
+                                    <div class="carousel-item active rounded-3">
+                                        <img src="~/img/hero-img-4.jpg" class="img-fluid w-100" alt="Slide 1">
+                                    </div>
+                                    <div class="carousel-item rounded-3">
+                                        <img src="~/img/hero-img-5.jpg" class="img-fluid w-100" alt="Slide 2">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @* Hiệu ứng mờ ảo phía sau *@
+                    <div class="bg-shape"></div>
+                </div>
+            </div>
+        </div>
+
+        @* PHẦN DANH SÁCH SẢN PHẨM *@
+        <div class="row g-4 mt-5">
+            <div class="text-center mx-auto mb-5">
+                <h1 class="display-5 text-dark fw-bold position-relative d-inline-block pb-3">
+                    Sản phẩm của chúng tôi
+                    <span class="position-absolute bottom-0 start-50 translate-middle-x bg-primary" style="height: 4px; width: 80px;"></span>
+                </h1>
+                <p class="text-muted mt-3">Chất lượng hàng đầu - Giao hàng cực nhanh</p>
+            </div>
+
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                    <div class="product-card h-100">
+                        <div class="product-img-wrapper">
+                            <a asp-controller="HangHoa" asp-action="Detail" asp-route-id="@item.MaHh">
+                                <img src="~/Hinh/HangHoa/@item.Hinh" class="img-fluid" alt="@item.TenHh">
+                            </a>
+                            <div class="product-badge">@item.TenLoai</div>
+                            <div class="product-actions">
+                                <button type="button" class="btn btn-light rounded-circle add-to-cart shadow" data-id="@item.MaHh" title="Thêm vào giỏ">
+                                    <i class="fa fa-shopping-cart text-primary"></i>
+                                </button>
+                                <a asp-controller="HangHoa" asp-action="Detail" asp-route-id="@item.MaHh" class="btn btn-light rounded-circle shadow" title="Xem chi tiết">
+                                    <i class="fa fa-eye text-dark"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-white rounded-bottom">
+                            <a asp-controller="HangHoa" asp-action="Detail" asp-route-id="@item.MaHh" class="text-decoration-none">
+                                <h6 class="text-dark fw-bold mb-2 product-title">@item.TenHh</h6>
+                            </a>
+
+                            <div class="d-flex mb-2 small">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="fa fa-star @(i <= item.DiemDanhGia ? "text-warning" : "text-muted")"></i>
+                                }
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between mt-3">
+                                <div class="price-box">
+                                    @if (item.GiaGoc > item.DonGia)
+                                    {
+                                        <div class="text-muted text-decoration-line-through x-small">@item.GiaGoc.ToString("#,##0") đ</div>
+                                    }
+                                    <span class="text-danger fw-bold fs-5">@item.DonGia.ToString("#,##0") đ</span>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary rounded-pill px-3 add-to-cart" data-id="@item.MaHh">Mua ngay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Nâng cấp Card sản phẩm */
+    .product-card {
+        background: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid #eee;
+    }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-color: #007bff;
+        }
+
+    .product-img-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 220px;
+    }
+
+        .product-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+    .product-card:hover .product-img-wrapper img {
+        transform: scale(1.1);
+    }
+
+    /* Hiệu ứng hiển thị nút khi hover */
+    .product-actions {
+        position: absolute;
+        bottom: -50px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        padding-bottom: 15px;
+        transition: 0.3s ease;
+        opacity: 0;
+    }
+
+    .product-card:hover .product-actions {
+        bottom: 15px;
+        opacity: 1;
+    }
+
+    /* Badge loại hàng */
+    .product-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0, 123, 255, 0.9);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        backdrop-filter: blur(5px);
+    }
+
+    /* Tiêu đề sản phẩm giới hạn 2 dòng */
+    .product-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 40px;
+    }
+
+    /* Hero Banner Shape */
+    .bg-shape {
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(0,123,255,0.2) 0%, transparent 70%);
+        border-radius: 50%;
+        z-index: 1;
+    }
+
+    .x-small {
+        font-size: 0.75rem;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', ".add-to-cart", function (e) {
+                e.preventDefault();
+                var $btn = $(this);
+                var id = $btn.data("id");
+
+                // Hiệu ứng nhấn nút
+                $btn.addClass('animate__animated animate__pulse');
+
+                $.ajax({
+                    url: "/Cart/AddToCart",
+                    type: "GET",
+                    data: { id: id, quantity: 1 },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Đã thêm vào giỏ!',
+                                text: 'Sản phẩm đã sẵn sàng trong giỏ hàng của bạn.',
+                                timer: 1500,
+                                showConfirmButton: false,
+                                background: '#fff',
+                                iconColor: '#28a745'
+                            });
+                            $(".cart-count").text(response.cartCount).addClass('animate__animated animate__bounceIn');
+                            setTimeout(() => $(".cart-count").removeClass('animate__animated animate__bounceIn'), 1000);
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({ icon: 'error', title: 'Lỗi kết nối', text: 'Vui lòng thử lại sau!' });
+                    }
+                });
+
+                setTimeout(() => $btn.removeClass('animate__animated animate__pulse'), 500);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,114 @@
+﻿@model IEnumerable<ECommerceMVC.ViewModels.CartItem>
+@{
+    ViewData["Title"] = "Giỏ hàng - HSHOP2023";
+    Layout = "_LayoutCustomer";
+}
+
+@* 1. Phần tiêu đề trang *@
+<div class="container-fluid page-header py-5">
+    <h1 class="text-center text-white display-6">Giỏ hàng của bạn</h1>
+</div>
+
+@* 2. Phần bảng giỏ hàng *@
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Hình</th>
+                        <th scope="col">Tên sản phẩm</th>
+                        <th scope="col">Giá</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Thành tiền</th>
+                        <th scope="col">Xóa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="cart-item-row" data-id="@item.MaHh">
+                            <th scope="row">
+                                <div class="d-flex align-items-center">
+                                    <img src="~/Hinh/HangHoa/@item.Hinh" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="@item.TenHh">
+                                </div>
+                            </th>
+                            <td><p class="mb-0 mt-4">@item.TenHh</p></td>
+                            <td><p class="mb-0 mt-4">@item.DonGia.ToString("#,##0") đ</p></td>
+                            <td>
+                                <div class="input-group quantity mt-4" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border update-quantity" data-type="minus">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm text-center border-0 quantity-input" value="@item.SoLuong" readonly>
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border update-quantity" data-type="plus">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><p class="mb-0 mt-4 item-total">@((item.SoLuong * item.DonGia).ToString("#,##0")) đ</p></td>
+                            <td>
+                                <a asp-action="RemoveCart" asp-controller="Cart" asp-route-id="@item.MaHh" class="btn btn-md rounded-circle bg-light border mt-4">
+                                    <i class="fa fa-times text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @* 3. Phần tổng cộng tiền *@
+        <div class="row g-4 justify-content-end">
+            <div class="col-8"></div>
+            <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
+                <div class="bg-light rounded p-4">
+                    <h1 class="display-6 mb-4">Tổng cộng</h1>
+                    <div class="d-flex justify-content-between mb-4">
+                        <h5 class="mb-0 me-4">Tổng tiền:</h5>
+                        <p class="mb-0 fs-4 fw-bold text-primary grand-total">@Model.Sum(p => p.SoLuong * p.DonGia).ToString("#,##0") đ</p>
+                    </div>
+                    <a asp-action="Checkout" asp-controller="Cart" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
+                        Tiến hành thanh toán
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* 4. Phần Scripts xử lý Ajax tăng giảm số lượng *@
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".update-quantity").click(function () {
+                var btn = $(this);
+                var row = btn.closest(".cart-item-row");
+                var id = row.data("id");
+                var input = row.find(".quantity-input");
+                var currentQty = parseInt(input.val());
+                var type = btn.data("type");
+
+                var newQty = (type === "plus") ? currentQty + 1 : currentQty - 1;
+                if (newQty < 1) return;
+
+                $.ajax({
+                    url: "/Cart/UpdateQuantity",
+                    data: { id: id, quantity: newQty },
+                    success: function (response) {
+                        if (response.success) {
+                            input.val(newQty);
+                            row.find(".item-total").text(response.itemTotal + " đ");
+                            $(".grand-total").text(response.cartTotal + " đ");
+                            $(".cart-count").text(response.cartCount);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

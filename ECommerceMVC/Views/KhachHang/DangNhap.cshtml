@@ -1,0 +1,57 @@
+﻿@model ECommerceMVC.ViewModels.DangNhapVM
+@{
+    ViewData["Title"] = "Đăng nhập cao cấp";
+}
+
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center animate__animated animate__fadeIn">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-lg rounded-0">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4 letter-spacing-3 fw-bold" style="font-family: 'Cormorant Garamond', serif;">LOG IN</h2>
+
+                    @if (ViewBag.Loi != null)
+                    {
+                        <div class="alert alert-danger border-0 rounded-0 small">@ViewBag.Loi</div>
+                    }
+
+                    <form asp-action="DangNhap" method="post">
+                        <div class="mb-4">
+                            <label class="small text-muted text-uppercase letter-spacing-1">Tên tài khoản</label>
+                            <input asp-for="UserName" class="form-control border-0 border-bottom rounded-0 px-0 shadow-none" placeholder="Username" />
+                        </div>
+                        <div class="mb-5">
+                            <label class="small text-muted text-uppercase letter-spacing-1">Mật khẩu</label>
+                            <input asp-for="Password" type="password" class="form-control border-0 border-bottom rounded-0 px-0 shadow-none" placeholder="••••••••" />
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100 rounded-0 py-3 text-uppercase letter-spacing-2" style="background: #111;">
+                            Đăng nhập
+                        </button>
+                    </form>
+
+                    <div class="mt-4 text-center">
+                        <a asp-action="DangKy" class="text-muted small text-decoration-none border-bottom">Trở thành hội viên mới</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .letter-spacing-3 {
+        letter-spacing: 5px;
+    }
+
+    .letter-spacing-2 {
+        letter-spacing: 2px;
+    }
+
+    .letter-spacing-1 {
+        letter-spacing: 1px;
+    }
+
+    input:focus {
+        border-color: #c5a059 !important;
+    }
+</style>

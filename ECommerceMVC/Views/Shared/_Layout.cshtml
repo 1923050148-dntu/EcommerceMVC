@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HSHOP LUXURY</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        :root {
+            --primary-dark: #1a1a1a;
+            --accent-gold: #c5a059; /* Màu vàng sang trọng */
+            --light-gray: #f8f9fa;
+            --text-muted: #6c757d;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-dark);
+            overflow-x: hidden;
+            background-color: #fff;
+        }
+
+        h1, h2, h3, .navbar-brand {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+        }
+
+        /* --- Header & Navigation --- */
+        .topbar {
+            background-color: var(--primary-dark);
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .navbar {
+            transition: all 0.5s ease;
+            padding: 20px 0;
+            border: none !important;
+        }
+
+            .navbar.scrolled {
+                padding: 10px 0;
+                background: rgba(255, 255, 255, 0.95) !important;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+                backdrop-filter: blur(10px);
+            }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--primary-dark) !important;
+        }
+
+        .nav-link {
+            font-weight: 400;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            margin: 0 15px;
+            position: relative;
+            color: var(--primary-dark) !important;
+        }
+
+            .nav-link::after {
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 1px;
+                bottom: 0;
+                left: 0;
+                background-color: var(--accent-gold);
+                transition: width 0.3s ease;
+            }
+
+            .nav-link:hover::after {
+                width: 100%;
+            }
+
+        /* --- Icons --- */
+        .nav-icon {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+            .nav-icon:hover {
+                color: var(--accent-gold);
+            }
+
+        .cart-badge {
+            background-color: var(--accent-gold);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 6px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 80px 0 30px;
+        }
+
+        .footer-link {
+            color: #aaa;
+            text-decoration: none;
+            transition: 0.3s;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+            .footer-link:hover {
+                color: var(--accent-gold);
+                padding-left: 5px;
+            }
+
+        /* --- Animations --- */
+        .fade-in-up {
+            animation: fadeInUp 1s ease backward;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar py-2 d-none d-lg-block">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-white small">
+                    <span class="me-4"><i class="fa-solid fa-phone me-2 text-gold"></i> +84 123 456 789</span>
+                    <span><i class="fa-solid fa-location-dot me-2 text-gold"></i> Tầng 10, Luxury Tower, VN</span>
+                </div>
+                <div class="text-white small">
+                    <a href="#" class="text-white text-decoration-none mx-2">Tài khoản</a>
+                    <a href="#" class="text-white text-decoration-none mx-2">Yêu thích (0)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-xl navbar-light bg-white">
+            <div class="container">
+                <a class="navbar-brand animate__animated animate__fadeIn" asp-controller="Home" asp-action="Index">
+                    H<span style="color: var(--accent-gold);">SHOP</span>.
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="fa-solid fa-bars-staggered"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Bộ sưu tập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Về chúng tôi</a>
+                        </li>
+                    </ul>
+
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="nav-icon mx-3" data-bs-toggle="modal" data-bs-target="#searchModal">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </a>
+                        <a asp-controller="Cart" asp-action="Index" class="nav-icon mx-3">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle cart-badge cart-count">
+                                0
+                            </span>
+                        </a>
+                        <a href="#" class="nav-icon mx-3">
+                            <i class="fa-regular fa-user"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer>
+        <div class="container text-center text-md-start">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h4 class="text-white mb-4">HSHOP LUXURY.</h4>
+                    <p class="text-muted" style="line-height: 1.8;">Mang đến những sản phẩm công nghệ và gia dụng cao cấp với trải nghiệm mua sắm đẳng cấp thế giới.</p>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h6 class="text-white text-uppercase mb-4 fw-bold">Liên kết</h6>
+                    <a href="#" class="footer-link">Sản phẩm mới</a>
+                    <a href="#" class="footer-link">Khuyến mãi</a>
+                    <a href="#" class="footer-link">Bảo hành</a>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="text-white text-uppercase mb-4 fw-bold">Hỗ trợ khách hàng</h6>
+                    <a href="#" class="footer-link">Chính sách bảo mật</a>
+                    <a href="#" class="footer-link">Điều khoản dịch vụ</a>
+                    <a href="#" class="footer-link">Câu hỏi thường gặp</a>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="text-white text-uppercase mb-4 fw-bold">Bản tin</h6>
+                    <div class="input-group">
+                        <input type="text" class="form-control border-0 bg-secondary text-white" placeholder="Email của bạn">
+                        <button class="btn btn-outline-light border-0" style="background: var(--accent-gold);">Gửi</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-5" style="border-color: #333;">
+            <div class="text-center pt-3">
+                <small class="text-muted">&copy; 2026 HSHOP LUXURY. Designed for Excellence.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // Hiệu ứng đổi màu Navbar khi cuộn chuột
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 50) {
+                $('.navbar').addClass('scrolled animate__animated animate__fadeInDown');
+            } else {
+                $('.navbar').removeClass('scrolled animate__animated animate__fadeInDown');
+            }
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

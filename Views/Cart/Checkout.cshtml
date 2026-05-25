@@ -1,0 +1,104 @@
+﻿@model IEnumerable<ECommerceMVC.ViewModels.CartItem>
+@{
+    ViewData["Title"] = "Thanh toán - HSHOP2023";
+}
+
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <h1 class="mb-4">Thông tin đơn hàng</h1>
+        <form asp-action="Checkout" asp-controller="Cart" method="post">
+            <div class="row g-5">
+                @* Cột trái: Nhập thông tin địa chỉ *@
+                <div class="col-md-12 col-lg-6 col-xl-7">
+                    <div class="form-item">
+                        <label class="form-label my-3">Người nhận hàng<sup>*</sup></label>
+                        <input type="text" class="form-control" placeholder="Nhập họ tên người nhận">
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Địa chỉ nhận hàng<sup>*</sup></label>
+                        <input type="text" class="form-control" placeholder="Số nhà, tên đường, phường/xã, quận/huyện...">
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Điện thoại<sup>*</sup></label>
+                        <input type="tel" class="form-control" placeholder="Số điện thoại liên lạc">
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Ghi chú</label>
+                        <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="5" placeholder="Ghi chú thêm (ví dụ: giao giờ hành chính)"></textarea>
+                    </div>
+                </div>
+
+                @* Cột phải: Tóm tắt tiền bạc *@
+                <div class="col-md-12 col-lg-6 col-xl-5">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Sản phẩm</th>
+                                    <th scope="col">Tên</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col">SL</th>
+                                    <th scope="col">Tổng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="d-flex align-items-center mt-2">
+                                                <img src="~/Hinh/HangHoa/@item.Hinh" class="img-fluid rounded-circle" style="width: 50px; height: 50px;" alt="">
+                                            </div>
+                                        </th>
+                                        <td class="py-5">@item.TenHh</td>
+                                        <td class="py-5">@item.DonGia.ToString("#,##0") đ</td>
+                                        <td class="py-5">@item.SoLuong</td>
+                                        <td class="py-5">@item.ThanhTien.ToString("#,##0") đ</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td class="py-5"><p class="mb-0 text-dark text-uppercase py-3">Tạm tính</p></td>
+                                    <td class="py-5"></td>
+                                    <td class="py-5"></td>
+                                    <td class="py-5"><div class="py-3 border-bottom border-top"><p class="mb-0 text-dark">@Model.Sum(p => p.ThanhTien).ToString("#,##0") đ</p></div></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td class="py-5"><p class="mb-0 text-dark py-4">Phí vận chuyển</p></td>
+                                    <td colspan="3" class="py-5">
+                                        <div class="py-4 border-bottom">
+                                            <p class="mb-0 text-dark">30.000 đ</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td class="py-5"><p class="mb-0 text-dark text-uppercase py-3">Dự kiến giao</p></td>
+                                    <td colspan="3" class="py-5">
+                                        <div class="py-3 border-bottom">
+                                            @* Tính ngày giao dự kiến: Ngày hiện tại + 3 ngày *@
+                                            <p class="mb-0 text-success fw-bold">@DateTime.Now.AddDays(3).ToString("dd/MM/yyyy")</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td class="py-5"><p class="mb-0 text-dark text-uppercase py-3">TỔNG TIỀN</p></td>
+                                    <td colspan="3" class="py-5">
+                                        <div class="py-3 border-bottom">
+                                            <p class="mb-0 text-danger fs-4 fw-bold">@((Model.Sum(p => p.ThanhTien) + 30000).ToString("#,##0")) đ</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                        <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Đặt hàng ngay</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

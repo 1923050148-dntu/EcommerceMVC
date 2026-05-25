@@ -1,0 +1,48 @@
+﻿<div class="nav-item dropdown">
+    <a href="#" class="my-auto nav-link dropdown-toggle px-0" data-bs-toggle="dropdown">
+        <i class="fas fa-user fa-2x text-dark transition-gold"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg animate__animated animate__fadeInUp m-0 rounded-0 bg-white">
+        <div class="p-3 border-bottom text-center bg-light">
+            <small class="text-uppercase letter-spacing-2 fw-bold text-muted" style="font-size: 10px;">Chào mừng quý khách</small>
+        </div>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="KhachHang" asp-action="Profile" class="dropdown-item py-2 px-4">
+                <i class="fa-regular fa-id-card me-2"></i> Hồ sơ cá nhân
+            </a>
+            <a asp-controller="DonHang" asp-action="LichSu" class="dropdown-item py-2 px-4">
+                <i class="fa-solid fa-box-open me-2"></i> Đơn hàng của tôi
+            </a>
+            <div class="dropdown-divider"></div>
+            <a asp-controller="KhachHang" asp-action="DangXuat" class="dropdown-item py-2 px-4 text-danger">
+                <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Đăng xuất
+            </a>
+        }
+        else
+        {
+            <a asp-controller="KhachHang" asp-action="DangNhap" class="dropdown-item py-2 px-4 transition-gold">
+                <i class="fa-solid fa-lock me-2"></i> Đăng nhập
+            </a>
+            <a asp-controller="KhachHang" asp-action="DangKy" class="dropdown-item py-2 px-4 transition-gold">
+                <i class="fa-solid fa-user-plus me-2"></i> Đăng ký thành viên
+            </a>
+        }
+    </div>
+</div>
+
+<style>
+    .transition-gold:hover {
+        color: #c5a059 !important;
+        transition: 0.3s ease;
+    }
+
+    .letter-spacing-2 {
+        letter-spacing: 2px;
+    }
+
+    .dropdown-menu {
+        min-width: 220px;
+    }
+</style>

@@ -1,0 +1,176 @@
+﻿@model IEnumerable<ECommerceMVC.ViewModels.HangHoaVM>
+
+@{
+    ViewData["Title"] = "HSHOP2023 - Danh sách sản phẩm";
+    Layout = "_LayoutCustomer";
+}
+
+<div class="container-fluid fruite py-5">
+    <div class="container py-5">
+
+        <h1 class="mb-4 text-primary fw-bold">
+            HSHOP2023 - Sản phẩm mới nhất
+        </h1>
+
+        <div class="row g-4">
+
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+
+                        <div class="rounded position-relative fruite-item border border-secondary shadow-sm bg-white h-100 d-flex flex-column">
+
+                            <div class="fruite-img overflow-hidden">
+                                <a asp-controller="HangHoa" asp-action="Detail" asp-route-id="@item.MaHh">
+                                    <img src="~/Hinh/HangHoa/@item.Hinh"
+                                         class="img-fluid w-100 rounded-top"
+                                         alt="@item.TenHh"
+                                         style="height: 220px; object-fit: cover;">
+                                </a>
+                            </div>
+
+                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                 style="top: 10px; left: 10px; z-index: 10;">
+                                @item.TenLoai
+                            </div>
+
+                            <div class="p-4 flex-grow-1 d-flex flex-column border-top-0 rounded-bottom">
+
+                                <a asp-controller="HangHoa" asp-action="Detail" asp-route-id="@item.MaHh">
+                                    <h5 class="text-dark fw-bold mb-2" style="height: 45px; overflow: hidden;">
+                                        @item.TenHh
+                                        h5>
+                                </a>
+
+                                <div class="d-flex mb-2">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="fa fa-star @(i <= item.DiemDanhGia ? "text-warning" : "text-muted")"></i>
+                                    }
+                                </div>
+
+                                <p class="text-muted small mb-3" style="height: 50px; overflow: hidden;">
+                                    @item.MoTaNgan
+                                </p>
+
+                                <div class="mt-auto">
+                                    <div class="d-flex align-items-center mb-3">
+                                        @if (item.GiaGoc > item.DonGia)
+                                        {
+                                            <span class="text-muted text-decoration-line-through me-2 small">
+                                                @item.GiaGoc.ToString("#,##0") đ
+                                            </span>
+                                        }
+                                        <span class="text-danger fs-5 fw-bold">
+                                            @item.DonGia.ToString("#,##0") đ
+                                        </span>
+                                    </div>
+
+                                    <div class="d-flex gap-2">
+                                        <a asp-controller="HangHoa" asp-action="Detail" asp-route-id="@item.MaHh"
+                                           class="btn btn-outline-primary border border-secondary rounded-pill px-3 flex-fill">
+                                            <i class="fa fa-eye me-2"></i> Chi tiết
+                                        </a>
+
+                                        <button type="button"
+                                                class="btn border border-secondary rounded-pill px-3 text-primary flex-fill add-to-cart"
+                                                data-id="@item.MaHh">
+                                            <i class="fa fa-shopping-bag me-2 text-primary"></i>
+                                            Mua ngay
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center">
+                    <h3 class="text-danger">Rất tiếc, hiện tại chưa có sản phẩm nào!</h3>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .fruite-item {
+        transition: all 0.4s ease;
+        cursor: pointer;
+    }
+
+        .fruite-item:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transform: translateY(-10px);
+            border-color: #81c408 !important;
+        }
+
+    .fruite-img img {
+        transition: transform 0.6s ease;
+    }
+
+    .fruite-item:hover .fruite-img img {
+        transform: scale(1.15);
+    }
+
+    a {
+        text-decoration: none !important;
+    }
+
+    .fruite-item h5 {
+        transition: color 0.3s ease;
+    }
+
+    .fruite-item:hover h5 {
+        color: #81c408 !important;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Mentor dùng .on('click') để đảm bảo bắt được sự kiện chính xác nhất
+            $(document).on('click', ".add-to-cart", function (e) {
+                e.preventDefault(); // Chặn chuyển trang tuyệt đối
+
+                var id = $(this).data("id"); // Lấy mã hàng từ thuộc tính data-id
+
+                $.ajax({
+                    url: "/Cart/AddToCart",
+                    type: "GET",
+                    data: { id: id, quantity: 1 },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Tuyệt vời!',
+                                text: 'Đã thêm sản phẩm vào giỏ hàng nha Nhật Anh!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            // Tự động cập nhật số lượng trên badge giỏ hàng nếu Nhật Anh có class .cart-count ở Layout
+                            $(".cart-count").text(response.cartCount);
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi rồi...',
+                            text: 'Không thể kết nối đến server. Nhật Anh check lại Controller nhé!'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
+}
