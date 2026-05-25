@@ -1,12 +1,12 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Sửa lại đường dẫn copy để Render tìm thấy file dự án
-COPY ["ECommerceMVC/ECommerceMVC.csproj", "ECommerceMVC/"]
-RUN dotnet restore "ECommerceMVC/ECommerceMVC.csproj"
+# Copy trực tiếp vì file .csproj nằm ngay thư mục gốc
+COPY ["ECommerceMVC.csproj", "./"]
+RUN dotnet restore "ECommerceMVC.csproj"
 
+# Copy toàn bộ code và build
 COPY . .
-WORKDIR "/src/ECommerceMVC"
 RUN dotnet build "ECommerceMVC.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -15,4 +15,5 @@ RUN dotnet publish "ECommerceMVC.csproj" -c Release -o /app/publish /p:UseAppHos
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+# Chắc chắn rằng tên file xuất ra là ECommerceMVC.dll
 ENTRYPOINT ["dotnet", "ECommerceMVC.dll"]
